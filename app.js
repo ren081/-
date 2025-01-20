@@ -14,4 +14,3 @@ function get_calc(btn) {
         document.dentaku.div_btn.value = "÷";
       }
     }
-<script src="app.js"></script>
