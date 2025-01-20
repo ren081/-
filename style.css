@@ -1,32 +1,76 @@
-body {
-  font-family: serif;
-  text-align: center;
+@charset "utf-8";
+
+/*全体*/
+.wrapper{
+    max-width: 600px;
+    margin: 0 auto;
+    color: #666;
+}
+#header {
+    text-align: center;
+    font-size: 24px;
+    width: 100%;
+    margin: 1rem 0 0;
 }
 
-.quizzes-container {
-  width: 400px;
-  margin: 50px auto;
+/*カレンダー*/
+#calendar {
+    text-align: center;
+    width: 100%;
+}
+table {
+    outline: 2px solid #ddd;
+    border-collapse: collapse;
+    width: 100%;
+}
+th {
+    color: #000;
+}
+th, td {
+    outline: 1px solid #ddd;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    text-align: center;
+}
+/*日曜日*/
+td:first-child {
+    color: red;
+}
+/*土曜日*/
+td:last-child {
+    color: blue;
+}
+/*前後月の日付*/
+td.disabled {
+    color: #ccc;
+}
+/*本日*/
+td.today {
+    background-color: #D65E72;
+    color: #fff;
 }
 
-.quiz-container {
-  border-bottom:1px solid black;
-  padding-bottom: 20px;
+/*ボタン*/
+#next-prev-button {
+    position: relative;
 }
-
-.btn {
-  margin-top: 20px;
-  font-family: serif;
-  background-color: white;
+#next-prev-button button{
+    cursor: pointer;
+    background: #B78D4A;
+    color: #fff;
+    border: 1px solid #B78D4A;
+    border-radius: 4px;
+    font-size: 1rem;
+    padding: 0.5rem 2rem;
+    margin: 1rem 0;
 }
-
-#score-container {
-  border: 1px solid black;
-  height: 50px;
+#next-prev-button button:hover{
+    background-color: #D4BB92;
+    border-color: #D4BB92;
 }
-
-.btn-score {
-  display: block;
-  margin: 20px auto;
-  font-family: serif;
-  background-color: white;
+#prev {
+    float: left;
+}
+#next {
+    float: right;
 }
