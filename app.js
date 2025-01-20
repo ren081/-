@@ -1,90 +1,74 @@
-        
+const week = ["日", "月", "火", "水", "木", "金", "土"];
+const today = new Date();
+// 月末だとずれる可能性があるため、1日固定で取得
+var showDate = new Date(today.getFullYear(), today.getMonth(), 1);
 
-let score = 0;
-
-function showScore(){
-  const totalScore = document.getElementById('score-message');
-    
-  if(score === 3) {
-    totalScore.innerHTML = score + "点：満点！おめでとう！"
-  } else if(score === 2) {
-    totalScore.innerHTML = score + "点：あともう一息！";
-  } else if(score === 1) {
-    totalScore.innerHTML = score + "点：まあまあ";
-  } else {
-    totalScore.innerHTML = score + "点：残念";
-  }   
+// 初期表示
+window.onload = function () {
+    showProcess(today, calendar);
+};
+// 前の月表示
+function prev(){
+    showDate.setMonth(showDate.getMonth() - 1);
+    showProcess(showDate);
 }
 
-/**
-1問目の正解はBの清少納言
-2問目の正解はAの中国
-3問目の正解はCのナイル
-**/
-
-const correct = '正解です';
-const incorrect = '不正解です';
-
-function answerQuiz1() {
-  const quiz_1 = document.getElementById('quiz-1');
-  const select = '1問目：' + quiz_1.answer.value + 'を選択しました';
-
-  if (quiz_1.answer.value == 'a') {
-    console.log(select);
-    console.log(incorrect);
-  // 正解はB
-  } else if (quiz_1.answer.value == 'b') {
-    score++;
-    console.log(select);
-    console.log(correct);
-  } else if (quiz_1.answer.value == 'c') {
-    console.log(select);
-    console.log(incorrect);
-  } else {
-    alert('1問目の答えを入力してください');
-  }
-  console.log('現在の点数：' + score); 
+// 次の月表示
+function next(){
+    showDate.setMonth(showDate.getMonth() + 1);
+    showProcess(showDate);
 }
 
-function answerQuiz2(){
-  const quiz_2 = document.getElementById('quiz-2');
-  const select = '2問目：' + quiz_2.answer.value + 'を選択しました';
+// カレンダー表示
+function showProcess(date) {
+    var year = date.getFullYear();
+    var month = date.getMonth();
+    document.querySelector('#header').innerHTML = year + "年 " + (month + 1) + "月";
 
-  // 正解はA
-  if (quiz_2.answer.value == 'a') {
-    score++;
-    console.log(select);
-    console.log(correct);
-  } else if (quiz_2.answer.value == 'b') {    
-    console.log(select);
-    console.log(incorrect);
-  } else if (quiz_2.answer.value == 'c') {
-    console.log(select);
-    console.log(incorrect);
-  } else {
-    alert('2問目の答えを入力してください');
-  }
-  console.log('現在の点数：' + score); 
+    var calendar = createProcess(year, month);
+    document.querySelector('#calendar').innerHTML = calendar;
 }
 
-function answerQuiz3(){
-  const quiz_3 = document.getElementById('quiz-3');
-  const select = '3問目：' + quiz_3.answer.value + 'を選択しました';
+// カレンダー作成
+function createProcess(year, month) {
+    // 曜日
+    var calendar = "<table><tr class='dayOfWeek'>";
+    for (var i = 0; i < week.length; i++) {
+        calendar += "<th>" + week[i] + "</th>";
+    }
+    calendar += "</tr>";
 
-  if (quiz_3.answer.value == 'a') {
-    console.log(select);
-    console.log(incorrect);
-  } else if (quiz_3.answer.value == 'b') {        
-    console.log(select);
-    console.log(incorrect);
-  // 正解はC
-  } else if (quiz_3.answer.value == 'c') {
-    score++;
-    console.log(select);
-    console.log(correct);
-  } else {
-    alert('3問目の答えを入力してください');
-  }
-  console.log('現在の点数：' + score); 
+    var count = 0;
+    var startDayOfWeek = new Date(year, month, 1).getDay();
+    var endDate = new Date(year, month + 1, 0).getDate();
+    var lastMonthEndDate = new Date(year, month, 0).getDate();
+    var row = Math.ceil((startDayOfWeek + endDate) / week.length);
+
+    // 1行ずつ設定
+    for (var i = 0; i < row; i++) {
+        calendar += "<tr>";
+        // 1colum単位で設定
+        for (var j = 0; j < week.length; j++) {
+            if (i == 0 && j < startDayOfWeek) {
+                // 1行目で1日まで先月の日付を設定
+                calendar += "<td class='disabled'>" + (lastMonthEndDate - startDayOfWeek + j + 1) + "</td>";
+            } else if (count >= endDate) {
+                // 最終行で最終日以降、翌月の日付を設定
+                count++;
+                calendar += "<td class='disabled'>" + (count - endDate) + "</td>";
+            } else {
+                // 当月の日付を曜日に照らし合わせて設定
+                count++;
+                if(year == today.getFullYear()
+                  && month == (today.getMonth())
+                  && count == today.getDate()){
+                    calendar += "<td class='today'>" + count + "</td>";
+                } else {
+                    calendar += "<td>" + count + "</td>";
+                }
+            }
+        }
+        calendar += "</tr>";
+    }
+    return calendar;
 }
-
